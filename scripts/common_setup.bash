@@ -31,7 +31,9 @@ printf "Name: $(git config user.name), Email: $(git config user.email)\n"
 log_section "Install Oh-My-Zsh"
 if [[ ! -d ${HOME}/.oh-my-zsh ]]; then
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-    printf "Change default shell to Zsh\n"
+fi
+log_section "Change default shell to Zsh"
+if [[ "$(grep ${USER} </etc/passwd | cut -f 7 -d ":")" != "/bin/zsh" ]]; then
     chsh -s /bin/zsh
 fi
 ZSH_CUSTOM="${HOME}/.oh-my-zsh/custom"

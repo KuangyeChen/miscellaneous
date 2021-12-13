@@ -103,7 +103,10 @@ nmap <Leader>q :q<CR>
 
 "---- Theme ----
 set background=dark
-colorscheme molokai
+try
+  colorscheme molokai
+catch
+endtry
 
 "---- vim-airlines ----
 " Show status. 
