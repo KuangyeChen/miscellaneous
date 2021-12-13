@@ -1,0 +1,23 @@
+#!/bin/sh
+
+if [ "$#" -eq 0 ];then
+    echo "'run_docker_with_gui IMAGE' or 'run_docker_with_gui ARGS IMAGE'"
+    exit 1
+fi
+
+IP=$(ifconfig en0 | grep inet | awk '$1=="inet" {print $2}')
+
+echo "IP address: " $IP
+xhost + $IP
+
+if [ "$#" -gt 1 ]; then
+    EXTRA_ARGS="$1"
+    IMAGE="$2"
+else
+    EXTRA_ARGS=""
+    IMAGE="$1"
+fi
+  
+echo "Run Image " $IMAGE " with args " $EXTRA_ARGS
+
+docker run -d $EXTRA_ARGS -e DISPLAY=$IP:0 -v /tmp/.X11-unix:/tmp/.X11-unix $IMAGE
