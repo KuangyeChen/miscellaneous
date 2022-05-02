@@ -1,0 +1,96 @@
+server {
+    listen 80 default_server;
+
+    listen 443 ssl;
+
+    root /config/www;
+    index index.html index.htm index.php;
+
+    server_name _;
+
+    ssl_certificate /config/keys/cert.crt;
+    ssl_certificate_key /config/keys/cert.key;
+
+    client_max_body_size 0;
+
+    # location / {
+    #     try_files $uri $uri/ /index.html /index.php?$args =404;
+    # }
+
+    location ~ ^(.+\.php)(.*)$ {
+        fastcgi_split_path_info ^(.+\.php)(.*)$;
+        fastcgi_pass 127.0.0.1:9000;
+        fastcgi_index index.php;
+        include /etc/nginx/fastcgi_params;
+    }
+
+    location /qbittorrent/ {
+        proxy_pass         http://192.168.50.3:8001/;
+        proxy_http_version 1.1;
+
+        proxy_set_header   Host               192.168.50.3:8001;
+        proxy_set_header   X-Forwarded-Host   $http_host;
+        proxy_set_header   X-Forwarded-For    $remote_addr;
+
+        proxy_cookie_path  /                  "/; Secure";
+    }
+
+    location /scrutiny/ {
+        proxy_pass         http://192.168.50.3:8002/;
+    }
+
+    location / {
+        proxy_pass         http://192.168.50.3:9090/;
+        proxy_http_version 1.1;
+
+        proxy_set_header   Host               192.168.50.3:9090;
+        proxy_set_header   X-Forwarded-Host   $http_host;
+        proxy_set_header   X-Forwarded-For    $remote_addr;
+
+        proxy_cookie_path  /                  "/; Secure";
+    }
+
+    location /nextcloud {
+        proxy_pass         http://192.168.50.3:8050/;
+        proxy_http_version 1.1;
+
+        proxy_set_header   Host               192.168.50.3:8050;
+        proxy_set_header   X-Forwarded-Host   $http_host;
+        proxy_set_header   X-Forwarded-For    $remote_addr;
+
+        proxy_cookie_path  /                  "/; Secure";
+    }
+
+    location /plex {
+        proxy_pass         http://192.168.50.3:32400/;
+        proxy_http_version 1.1;
+
+        proxy_set_header   Host               192.168.50.3:32400;
+        proxy_set_header   X-Forwarded-Host   $http_host;
+        proxy_set_header   X-Forwarded-For    $remote_addr;
+
+        proxy_cookie_path  /                  "/; Secure";
+    }
+
+    location /filebrowser {
+        proxy_pass         http://192.168.50.3:8080/;
+        proxy_http_version 1.1;
+
+        proxy_set_header   Host               192.168.50.3:8080;
+        proxy_set_header   X-Forwarded-Host   $http_host;
+        proxy_set_header   X-Forwarded-For    $remote_addr;
+
+        proxy_cookie_path  /                  "/; Secure";
+    }
+
+    location /portainer {
+        proxy_pass         http://192.168.50.3:9000/;
+        proxy_http_version 1.1;
+
+        proxy_set_header   Host               192.168.50.3:9000;
+        proxy_set_header   X-Forwarded-Host   $http_host;
+        proxy_set_header   X-Forwarded-For    $remote_addr;
+
+        proxy_cookie_path  /                  "/; Secure";
+    }
+}

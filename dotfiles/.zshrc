@@ -86,7 +86,7 @@ plugins=(
 )
 
 # Docker
-if [[ $(command -v docker --help)]]; then
+if [[ $(command -v docker --help) ]]; then
     plugins+=(
         docker
     )
@@ -159,3 +159,4 @@ fi
 
 # Solana
 export PATH="${HOME}/.local/share/solana/install/active_release/bin:$PATH"
+. "/home/field/.acme.sh/acme.sh.env"

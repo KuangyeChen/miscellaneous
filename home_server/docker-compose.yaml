@@ -50,14 +50,14 @@ services:
       - PUID=${SERVICE_PUID}
       - PGID=${SERVICE_PGID}
       - TZ=${SERVICE_TZ}
-      - WEBUI_PORT=8080
+      - WEBUI_PORT=8001
     volumes:
       - ${SERVICE_DIR}/qbittorrent/config:/config
       - ${MAIN_STORAGE}/downloads:/downloads
     ports:
       - 6881:6881
       - 6881:6881/udp
-      - 8001:8080
+      - 8001:8001
     restart: unless-stopped
 
   plex:
@@ -73,6 +73,28 @@ services:
       - ${SERVICE_DIR}/plex/config:/config
       - ${MAIN_STORAGE}/downloads/tv:/tv
       - ${MAIN_STORAGE}/downloads/movies:/movies
+    restart: unless-stopped
+
+  scrutiny:
+    image: lscr.io/linuxserver/scrutiny
+    container_name: scrutiny
+    cap_add:
+      - SYS_RAWIO
+      - SYS_ADMIN #optional
+    environment:
+      - PUID=${SERVICE_PUID}
+      - PGID=${SERVICE_PGID}
+      - TZ=${SERVICE_TZ}
+      - SCRUTINY_API_ENDPOINT=http://localhost:8080
+      - SCRUTINY_WEB=true
+      - SCRUTINY_COLLECTOR=true
+    volumes:
+      - ${SERVICE_DIR}/scrutiny/config:/config
+      - /run/udev:/run/udev:ro
+    ports:
+      - 8002:8080
+    devices:
+      - /dev/sda:/dev/sda
     restart: unless-stopped
   
   rsnapshot:
