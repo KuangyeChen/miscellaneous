@@ -159,4 +159,4 @@ fi
 
 # Solana
 export PATH="${HOME}/.local/share/solana/install/active_release/bin:$PATH"
-. "/home/field/.acme.sh/acme.sh.env"
+
