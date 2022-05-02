@@ -86,12 +86,21 @@ plugins=(
     zsh-rm2trash
 )
 
+# Rust
+if [[ $(command -v rustc --help) ]]; then
+    plugins+=(
+        rust
+    )
+fi
+
+# Tmux
 if [[ $(command -v tmux --help) ]]; then
     plugins+=(
         tmux
     )
 fi
 
+# Macos
 if [[ ${OSTYPE} == darwin* ]]; then
     plugins+=(
         macos
@@ -144,3 +153,7 @@ if [[ $(command -v pyenv --help) ]]; then
     eval "$(pyenv init -)"
     eval "$(pyenv virtualenv-init -)"
 fi
+
+# Solana
+export PATH="${HOME}/.local/share/solana/install/active_release/bin:$PATH"
+
