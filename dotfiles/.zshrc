@@ -79,27 +79,30 @@ plugins=(
     z
     extract
     pip
-    docker
     sudo
     zsh-autosuggestions
     zsh-syntax-highlighting
     zsh-rm2trash
 )
 
+# Docker
+if [[ $(command -v docker --help)]]; then
+    plugins+=(
+        docker
+    )
+fi
 # Rust
 if [[ $(command -v rustc --help) ]]; then
     plugins+=(
         rust
     )
 fi
-
 # Tmux
 if [[ $(command -v tmux --help) ]]; then
     plugins+=(
         tmux
     )
 fi
-
 # Macos
 if [[ ${OSTYPE} == darwin* ]]; then
     plugins+=(
@@ -156,4 +159,3 @@ fi
 
 # Solana
 export PATH="${HOME}/.local/share/solana/install/active_release/bin:$PATH"
-
