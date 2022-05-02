@@ -1,0 +1,103 @@
+---
+version: "2.1"
+
+services:
+  portainer:
+    image: portainer/portainer-ce:2.11.1
+    container_name: portainer
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${SERVICE_DIR}/portainer/data:/data
+    ports:
+      - 8000:8000
+      - 9443:9443
+      - 9000:9000
+
+  filebrowser:
+    image: filebrowser/filebrowser:s6
+    container_name: filebrowser
+    restart: unless-stopped
+    volumes:
+      - /:/srv
+      - ${SERVICE_DIR}/filebrowser/filebrowser.db:/database/filebrowser.db
+      - ${SERVICE_DIR}/filebrowser/settings.json:/config/settings.json
+    environment:
+      # Go with root
+      - PUID=${SERVICE_PUID}
+      - PGID=${SERVICE_PGID}
+    ports:
+      - 8080:80
+    
+  nextcloud:
+    image: lscr.io/linuxserver/nextcloud
+    container_name: nextcloud
+    environment:
+      - PUID=${SERVICE_PUID}
+      - PGID=${SERVICE_PGID}
+      - TZ=${SERVICE_TZ}
+    volumes:
+      - ${SERVICE_DIR}/nextcloud/config:/config
+      - ${SERVICE_DIR}/nextcloud/data:/data
+    ports:
+      - 8050:443
+    restart: unless-stopped
+
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent
+    container_name: qbittorrent
+    environment:
+      - PUID=${SERVICE_PUID}
+      - PGID=${SERVICE_PGID}
+      - TZ=${SERVICE_TZ}
+      - WEBUI_PORT=8080
+    volumes:
+      - ${SERVICE_DIR}/qbittorrent/config:/config
+      - ${MAIN_STORAGE}/downloads:/downloads
+    ports:
+      - 6881:6881
+      - 6881:6881/udp
+      - 8001:8080
+    restart: unless-stopped
+
+  plex:
+    image: lscr.io/linuxserver/plex
+    container_name: plex
+    network_mode: host
+    environment:
+      - PUID=${SERVICE_PUID}
+      - PGID=${SERVICE_PGID}
+      - TZ=${SERVICE_TZ}
+      - VERSION=docker
+    volumes:
+      - ${SERVICE_DIR}/plex/config:/config
+      - ${MAIN_STORAGE}/downloads/tv:/tv
+      - ${MAIN_STORAGE}/downloads/movies:/movies
+    restart: unless-stopped
+  
+  rsnapshot:
+    image: lscr.io/linuxserver/rsnapshot
+    container_name: rsnapshot
+    environment:
+      - PUID=${SERVICE_PUID}
+      - PGID=${SERVICE_PGID}
+      - TZ=${SERVICE_TZ}
+    volumes:
+      - ${SERVICE_DIR}/rsnapshot/config:/config
+      - ${BACKUP_STORAGE}/rsnapshot/snapshots:/.snapshots
+      - ${MAIN_STORAGE}:/data
+    restart: unless-stopped
+  
+  nginx:
+    image: lscr.io/linuxserver/nginx
+    container_name: nginx
+    environment:
+      - PUID=${SERVICE_PUID}
+      - PGID=${SERVICE_PGID}
+      - TZ=${SERVICE_TZ}
+    volumes:
+      - ${SERVICE_DIR}/nginx/config:/config
+    ports:
+      - 80:80
+      - 443:443
+    restart: unless-stopped
