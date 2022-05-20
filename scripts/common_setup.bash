@@ -42,7 +42,7 @@ log_section "Install Oh-My-Zsh Themes and Plugins"
 safe_git_clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM}/plugins/zsh-autosuggestions
 safe_git_clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting
 safe_git_clone https://github.com/KuangyeChen/zsh-rm2trash ${ZSH_CUSTOM}/plugins/zsh-rm2trash
-safe_git_clone https://github.com/bhilburn/powerlevel9k.git ${ZSH_CUSTOM}/themes/powerlevel9k
+safe_git_clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 if [[ ${OSTYPE} == linux-gnu ]]; then
     git clone https://github.com/powerline/fonts.git --depth=1 /tmp/fonts
     /tmp/fonts/install.sh && rm -rf /tmp/fonts
