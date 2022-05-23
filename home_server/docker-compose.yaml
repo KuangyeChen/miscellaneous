@@ -28,7 +28,20 @@ services:
       - PGID=${SERVICE_PGID}
     ports:
       - 8080:80
-    
+ 
+  freshrss:
+    image: lscr.io/linuxserver/freshrss
+    container_name: freshrss
+    environment:
+      - PUID=${SERVICE_PUID}
+      - PGID=${SERVICE_PGID}
+      - TZ=${SERVICE_TZ}
+    volumes:
+      - ${SERVICE_DIR}/freshrss/data:/config
+    ports:
+      - 9080:80
+    restart: unless-stopped
+ 
   nextcloud:
     image: lscr.io/linuxserver/nextcloud
     container_name: nextcloud
