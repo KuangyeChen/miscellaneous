@@ -7,7 +7,7 @@ export ZSH=${HOME}/.oh-my-zsh
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="powerlevel9k/powerlevel9k"
+ZSH_THEME="powerlevel10k/powerlevel10k"
 
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(time context dir pyenv background_jobs vcs status)
 
@@ -152,7 +152,6 @@ if [[ ${OSTYPE} == linux-gnu ]]; then
 fi
 
 if [[ $(command -v pyenv --help) ]]; then
-    eval "$(pyenv init --path)"
     eval "$(pyenv init -)"
     eval "$(pyenv virtualenv-init -)"
 fi
